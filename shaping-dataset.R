@@ -143,3 +143,6 @@ levels(dta$equipement1) <- c("Equipement NA",
                              "Autre")
 dta$equipement2 <- substring(dta$equipement,5,5)
 dta$equipement3 <- substring(dta$equipement,9,9)
+
+save(dta, file="data.RData")
+
