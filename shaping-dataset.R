@@ -129,21 +129,14 @@ levels(dta$trajet) <- c("Motif NA",
 # 2 : Casque
 # 9 : Autre
 # 4 : Gilet réflechissant
-dta$equipement1 <- substring(dta$equipement,1,1)
-dta$equipement1 <- factor(dta$equipement1)
-levels(dta$equipement1) <- c("Equipement NA",
-                             "Aucun équipement",
-                             "Ceinture",
-                             "Casque",
-                             "Dispositif enfants",
-                             "Gilet réflechissant",
-                             "Airbag",
-                             "Gants",
-                             "Equipement non déterminable",
-                             "Autre")
-dta$equipement2 <- substring(dta$equipement,5,5)
-dta$equipement3 <- substring(dta$equipement,9,9)
+require(stringr)
+
+dta$casque <- str_count(dta$equipement,"2")
+dta$gilet <- str_count(dta$equipement,"4")
+dta$equipement_autre <- str_count(dta$equipement,"9")
 
 save(dta, file="data.RData")
+
+
 
 
