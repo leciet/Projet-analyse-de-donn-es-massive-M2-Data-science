@@ -146,3 +146,4 @@ dta$equipement3 <- substring(dta$equipement,9,9)
 
 save(dta, file="data.RData")
 
+
