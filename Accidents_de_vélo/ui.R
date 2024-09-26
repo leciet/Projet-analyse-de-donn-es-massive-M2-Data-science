@@ -19,18 +19,40 @@ navbarPage(title = "Accidents de vélo en France",
                          <hr>"),
                     fluidRow(
                       tabsetPanel(
+                        # Carte générale -- -- -- -- -- -- -- -- -- -- -- -- --
                         tabPanel("Carte",
                                  column(width = 4,
                                         wellPanel("Paramètres",
-                                                  style = "background : skyblue")
+                                                  style = "background : skyblue"),
+                                        actionButton('parametres11','Valider')
                                         ),
                                  column(width = 8,
                                         leafletOutput("leaflet")
                                         )
                                  ),
-                        tabPanel("Graphiques"),
+                        
+                        # Graphiques de base -- -- -- -- -- -- -- -- -- -- -- --
+                        tabPanel("Graphiques",
+                                 column(width = 4,
+                                        wellPanel("Paramètres",
+                                                  style = "background : lightgreen"),
+                                        actionButton('parametres12','Valider')
+                                        ),
+                                 column(width = 8
+                                        )
+                                 ),
+                        
+                        # Table de données -- -- -- -- -- -- -- -- -- -- -- -- 
                         tabPanel("Données",
-                                 dataTableOutput("donnees"))
+                                 column(width = 4,
+                                        wellPanel("Paramètres",
+                                                  style = "background : khaki"),
+                                        actionButton('parametres13','Valider')
+                                        ),
+                                 column(width = 8,
+                                        dataTableOutput("donnees")
+                                        )
+                                 )
                              ))
                     ),
            # 2ème onglet analyse stats =========================================
