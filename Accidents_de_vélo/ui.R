@@ -8,22 +8,38 @@
 #
 
 library(shiny)
+library(leaflet)
 
 # Define UI for application that draws a histogram
 navbarPage(title = "Accidents de vélo en France",
-           
+           # 1er onglet description ============================================
            tabPanel(title = "Description",
-                    "Petite description du contexte et des enjeux",
+                    HTML("<h1> Contexte </h1>
+                          <body> Petite description ici</body>
+                         <hr>"),
                     fluidRow(
-                      column(width = 4, 
-                             wellPanel("Paramètres")
-                             ),
-                      column(width = 8, "Petit schéma")
-                    )
+                      tabsetPanel(
+                        tabPanel("Carte",
+                                 column(width = 4,
+                                        wellPanel("Paramètres",
+                                                  style = "background : skyblue")
+                                        ),
+                                 column(width = 8,
+                                        leafletOutput("leaflet")
+                                        )
+                                 ),
+                        tabPanel("Graphiques"),
+                        tabPanel("Données",
+                                 dataTableOutput("donnees"))
+                             ))
                     ),
-           
+           # 2ème onglet analyse stats =========================================
            navbarMenu("Analyse",
-                      tabPanel("ACP"),
-                      tabPanel("Analyse spatio-temporelle")
-                      )
+                      tabPanel("Analyse univariée"),
+                      tabPanel("Analyse bivariée"),
+                      tabPanel("Analyse multivariée")
+                      ),
+           # 3ème onglet analyse spatio-temp ===================================
+           tabPanel("Analyse spatio-temporelle"
+                    )
            )

@@ -8,6 +8,7 @@
 #
 
 library(shiny)
+library(tidyverse)
 
 # Define server logic required to draw a histogram
 function(input, output, session) {
@@ -24,5 +25,12 @@ function(input, output, session) {
              main = 'Histogram of waiting times')
 
     })
+    
+    output$leaflet <- renderLeaflet({m <- leaflet() %>% 
+                                      addTiles()
+                                    m
+                                    }
+                                    )
+    output$donnees <- renderDataTable({dta})
 
 }
