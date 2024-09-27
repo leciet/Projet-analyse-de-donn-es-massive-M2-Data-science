@@ -1,3 +1,4 @@
+
 # ------------------------------------------------------------------------------
 #  16/09/2024
 #  Petit script pépou pour voir les données
@@ -27,25 +28,25 @@ dta$com <- factor(dta$com)
 
 dta <- subset(dta, 
               select = -c(Num_Acc,
-               int,
-               nbv,
-               prof,
-               circ,
-               col,
-               plan,
-               lartpc,
-               larrout,
-               infra,
-               obs,
-               obsm,
-               choc,
-               manv,
-               vehiculeid,
-               manoeuvehicules,
-               situ,
-               X_infos_commune.code_epci,
-               secuexist,
-               typevehicules))
+                          int,
+                          nbv,
+                          prof,
+                          circ,
+                          col,
+                          plan,
+                          lartpc,
+                          larrout,
+                          infra,
+                          obs,
+                          obsm,
+                          choc,
+                          manv,
+                          vehiculeid,
+                          manoeuvehicules,
+                          situ,
+                          X_infos_commune.code_epci,
+                          secuexist,
+                          typevehicules))
 
 # secu_exist =? secu1 
 # equipement
@@ -135,8 +136,27 @@ dta$casque <- str_count(dta$equipement,"2")
 dta$gilet <- str_count(dta$equipement,"4")
 dta$equipement_autre <- str_count(dta$equipement,"9")
 
-save(dta, file="data.RData")
+don <- dta
 
 
+don$date <- as.Date(don$date)
+don$mois <- fct_relevel(don$mois,
+                        c("janvier", "février", "mars", "avril",
+                          "mai", "juin", "juillet", "août",
+                          "septembre", "octobre", "novembre", "décembre"))
+don$jour <- fct_relevel(don$jour,
+                        c('lundi', 'mardi', 'mercredi', 'jeudi',
+                          'vendredi', 'samedi', 'dimanche'))
 
+ind_hr <- which(nchar(as.character(don$hrmn)) != 5)
+don <- don[-ind_hr,]
+
+ind_age <- !(don$age > 80 | is.na(don$age) | don$age < 13)
+
+don <- don[ind_age,] 
+don <- don[,-20]
+
+summary(don)
+
+save(don, file = "don.RData")
 
