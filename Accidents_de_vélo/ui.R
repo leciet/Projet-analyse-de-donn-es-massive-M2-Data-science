@@ -16,7 +16,7 @@ navbarPage(title = "Accidents de vélo en France",
            tabPanel(title = "Description",
                     HTML("<h1> Contexte </h1>
                           <body> Petite description ici</body>
-                         <hr>"),
+                          <hr>"),
                     fluidRow(
                       tabsetPanel(
                         # Carte générale -- -- -- -- -- -- -- -- -- -- -- -- --
