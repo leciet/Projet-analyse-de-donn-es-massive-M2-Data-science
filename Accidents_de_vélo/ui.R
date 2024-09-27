@@ -80,8 +80,18 @@ navbarPage(title = "Accidents de vélo en France",
                                                            sep = '')),
                                         column(9,
                                                plotlyOutput('graph_uni')))),
-                      tabPanel("Analyse bivariée"),
-                      tabPanel("Analyse multivariée")
+                
+                      tabPanel("Analyse multivariée",
+                               fluidRow(column(3,
+                                               selectInput('varmulti',
+                                                           label = 'Variable à représenter',
+                                                           choices = setNames(var_analyse[-c(5,10,11,14:15)],
+                                                                              c("Année", "Mois", "Jour", "Heure",
+                                                                                "Luminosité", "Météo", "Type de route", 
+                                                                                "Type de surface", "Âge", "Type de trajet"))),
+                                               "Remarque : les variables à 2 modalités ont été retirées."),
+                                        column(9,
+                                               plotOutput('plot_CA'))))
                       ),
            # 3ème onglet analyse spatio-temp ===================================
            tabPanel("Analyse spatio-temporelle"
