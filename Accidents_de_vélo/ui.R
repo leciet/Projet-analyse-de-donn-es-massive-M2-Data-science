@@ -9,59 +9,22 @@
 
 library(shiny)
 library(leaflet)
+library(DT)
 
 # Define UI for application that draws a histogram
-navbarPage(title = "Accidents de vélo en France",
-           # 1er onglet description ============================================
-           tabPanel(title = "Description",
-                    HTML("<h1> Contexte </h1>
-                          <body> Petite description ici</body>
-                          <hr>"),
-                    fluidRow(
-                      tabsetPanel(
-                        # Carte générale -- -- -- -- -- -- -- -- -- -- -- -- --
-                        tabPanel("Carte",
-                                 column(width = 4,
-                                        wellPanel("Paramètres",
-                                                  style = "background : skyblue"),
-                                        actionButton('parametres11','Valider')
-                                        ),
-                                 column(width = 8,
-                                        leafletOutput("leaflet")
-                                        )
-                                 ),
-                        
-                        # Graphiques de base -- -- -- -- -- -- -- -- -- -- -- --
-                        tabPanel("Graphiques",
-                                 column(width = 4,
-                                        wellPanel("Paramètres",
-                                                  style = "background : lightgreen"),
-                                        actionButton('parametres12','Valider')
-                                        ),
-                                 column(width = 8
-                                        )
-                                 ),
-                        
-                        # Table de données -- -- -- -- -- -- -- -- -- -- -- -- 
-                        tabPanel("Données",
-                                 column(width = 4,
-                                        wellPanel("Paramètres",
-                                                  style = "background : khaki"),
-                                        actionButton('parametres13','Valider')
-                                        ),
-                                 column(width = 8,
-                                        dataTableOutput("donnees")
-                                        )
-                                 )
-                             ))
-                    ),
-           # 2ème onglet analyse stats =========================================
-           navbarMenu("Analyse",
-                      tabPanel("Analyse univariée"),
-                      tabPanel("Analyse bivariée"),
-                      tabPanel("Analyse multivariée")
-                      ),
+shinyUI(
+  navbarPage(title = "Accidents de vélo en France",
+             # 1er onglet description ==========================================
+             source("ui/ui_description.R",local = TRUE)$value,
+             
+             # 2ème onglet analyse stats =======================================
+             navbarMenu("Analyse",
+                        tabPanel("Analyse univariée"),
+                        tabPanel("Analyse bivariée"),
+                        tabPanel("Analyse multivariée")
+                        ),
            # 3ème onglet analyse spatio-temp ===================================
            tabPanel("Analyse spatio-temporelle"
                     )
            )
+)
