@@ -10,6 +10,8 @@
 library(shiny)
 library(leaflet)
 
+load("don.RData")
+
 # Define UI for application that draws a histogram
 navbarPage(title = "Accidents de vélo en France",
            # 1er onglet description ============================================
@@ -57,7 +59,11 @@ navbarPage(title = "Accidents de vélo en France",
                     ),
            # 2ème onglet analyse stats =========================================
            navbarMenu("Analyse",
-                      tabPanel("Analyse univariée"),
+                      tabPanel("Analyse univariée",
+                               fluidRow(column(3,
+                                               'Param'),
+                                        column(9,
+                                               'Output'))),
                       tabPanel("Analyse bivariée"),
                       tabPanel("Analyse multivariée")
                       ),
