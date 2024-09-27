@@ -151,10 +151,24 @@ don$jour <- fct_relevel(don$jour,
 ind_hr <- which(nchar(as.character(don$hrmn)) != 5)
 don <- don[-ind_hr,]
 
-ind_age <- !(don$age > 80 | is.na(don$age) | don$age < 13)
+ind_dep <- which(as.numeric(don$dep) > 100)
+don <- don[-ind_dep,]
 
+ind_coord <- which(don$lat == 0 & don$long == 0)
+don$lat[ind_coord] <- NA
+don$long[ind_coord] <- NA
+
+ind_age <- !(don$age > 80 | is.na(don$age) | don$age < 13)
 don <- don[ind_age,] 
+
+don$trajet[don$trajet == 'Motif NA'] <- NA
+
+don$casque <- as.factor(don$casque)
+don$gilet <- as.factor(don$gilet)
+
 don <- don[,-20]
+
+don$sexe <- droplevels(don$sexe)
 
 summary(don)
 
