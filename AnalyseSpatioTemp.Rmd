@@ -9,12 +9,13 @@ date: "2024-09-21"
 ```{r}
 path <- "C:/Users/pc/Documents/Projet/GUT"
 library(readr)
-vl <- read_csv("accidentsVelo.csv")
+vl <- read_csv(file.path(path, "accidentsVelo.csv"))
 head(vl)
 summary(vl)
 ```
 ```{r}
 library(tidyr)
+library(dplyr)
 
 # Suppression des lignes avec des valeurs manquantes 
 vl <- vl %>%
@@ -85,6 +86,8 @@ vl <- vl %>%
 ```{r}
 summary(vl)
 str(vl)
+vl <- vl[vl$lat >= 41 & vl$lat <= 51 & vl$long >= -5 & vl$long <= 10, ]
+
 ```
 ## ANALYSE TEMPORELLE
 ```{r}
@@ -202,7 +205,7 @@ plot(forecasted, main = "Prévision du nombre d'accidents de vélo", xlab = "Ann
 
 
 ```{r}
-install.packages("leaflet")
+#install.packages("leaflet")
 library(leaflet)
 
 # Créer une carte avec leaflet
@@ -215,8 +218,8 @@ leaflet(vl) %>%
 
 ```{r}
 # Installer les packages nécessaires
-install.packages("leaflet")
-install.packages("leaflet.extras")  # Pour la carte de chaleur
+#install.packages("leaflet")
+#install.packages("leaflet.extras")  # Pour la carte de chaleur
 library(leaflet)
 library(leaflet.extras)
 
@@ -255,4 +258,13 @@ head(vlgrp)
 #install.packages("writexl")
 library(writexl)
 write_xlsx(vlgrp, "NbrAccpmois.xlsx")
+# Calculer le nombre de lignes pour chaque année
+nbre_lignes_par_annee <- vl %>%
+    group_by(an) %>%
+    summarise(n = n())  # Compte le nombre de lignes pour chaque année
+
+# Affichez le résultat
+print(nbre_lignes_par_annee)
+
 ```
+
