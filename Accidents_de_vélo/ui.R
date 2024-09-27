@@ -9,8 +9,11 @@
 
 library(shiny)
 library(leaflet)
+library(DT)
+library(plotly)
 
 load("don.RData")
+var_analyse <- names(don)[c(2:5,10:18,20,21)]
 
 # Define UI for application that draws a histogram
 navbarPage(title = "Accidents de vélo en France",
@@ -52,7 +55,7 @@ navbarPage(title = "Accidents de vélo en France",
                                         actionButton('parametres13','Valider')
                                         ),
                                  column(width = 8,
-                                        dataTableOutput("donnees")
+                                        DTOutput("donnees")
                                         )
                                  )
                              ))
@@ -61,9 +64,22 @@ navbarPage(title = "Accidents de vélo en France",
            navbarMenu("Analyse",
                       tabPanel("Analyse univariée",
                                fluidRow(column(3,
-                                               'Param'),
+                                               selectInput('varuni',
+                                                           label = 'Variable à représenter',
+                                                           choices = setNames(var_analyse,
+                                                                              c("Année", "Mois", "Jour", "Heure",
+                                                                                "Agglomération", "Luminosité", "Météo", 
+                                                                                "Type de route", "Type de surface", 
+                                                                                "Gravité", "Sexe", "Âge", "Type de trajet", 
+                                                                                "Port de casque", "Port de gilet"))),
+                                               sliderInput('annee',
+                                                           label = 'Plage temporelle',
+                                                           min = 2005,
+                                                           max = 2021,
+                                                           value = c(2005, 2021),
+                                                           sep = '')),
                                         column(9,
-                                               'Output'))),
+                                               plotlyOutput('graph_uni')))),
                       tabPanel("Analyse bivariée"),
                       tabPanel("Analyse multivariée")
                       ),

@@ -9,6 +9,7 @@
 
 library(shiny)
 library(tidyverse)
+library(DT)
 
 # Define server logic required to draw a histogram
 function(input, output, session) {
@@ -31,6 +32,7 @@ function(input, output, session) {
                                     m
                                     }
                                     )
-    output$donnees <- renderDataTable({dta})
-
+    output$donnees <- renderDT({dta})
+    
+    source("an_uni.R", local = T)
 }
