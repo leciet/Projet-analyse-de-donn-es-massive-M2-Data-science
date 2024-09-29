@@ -9,15 +9,21 @@ tabPanel(title = "Description",
                       column(width = 4,
                              wellPanel(h2("Paramètres"),
                                        style = "background : skyblue",
+                                       # clustering 
+                                       checkboxInput(inputId = 'clusterMap1',
+                                                     label = "Détailler la carte",
+                                                     value = FALSE),
                                        # choix de la gravité à afficher
-                                       checkboxGroupInput(inputId = "gravMap1", 
-                                                          label = "Gravité de l'accident", 
-                                                          selected = "Indemne",
-                                                          choices = c("Indemne", 
-                                                                      "Blessé léger", 
-                                                                      "Blessé hospitalisé",
-                                                                      "Tué")
+                                       selectInput(inputId = "gravMap1",
+                                                   label = "Gravité de l'accident *",
+                                                   selected = "Indemne",
+                                                   choices = c("Indemne", 
+                                                               "Blessé léger",
+                                                               "Blessé hospitalisé",
+                                                               "Tué"),
+                                                   multiple = TRUE
                                                           ),
+                                       
                                        # choix des dates 
                                        dateRangeInput(inputId = "dateMap1", 
                                                       label = NULL,
@@ -27,7 +33,8 @@ tabPanel(title = "Description",
                                                       language = "fr", 
                                                       separator = " à ")
                                        ),
-                             actionButton('parametres11','Valider')
+                             actionButton('parametres11','Valider',disabled = TRUE),
+                             HTML("<h5 style = 'color:red'>* Sélectionner au moins 1 argument</h5>")
                       ),
                       column(width = 8,
                              leafletOutput("leaflet")
@@ -48,13 +55,27 @@ tabPanel(title = "Description",
              # Table de données -- -- -- -- -- -- -- -- -- -- -- -- 
              tabPanel("Données",
                       column(width = 4,
-                             wellPanel("Paramètres",
-                                       style = "background : khaki"),
+                             wellPanel(h2("Paramètres"),
+                                       style = "background : khaki",
+                                       selectInput(inputId = "coldt",
+                                                   label = "Sélection des colonnes",
+                                                   multiple = TRUE,
+                                                   choices = colnames(don),
+                                                   selected = c('date',
+                                                                'dep',
+                                                                'sexe',
+                                                                'age',
+                                                                'trajet',
+                                                                'casque',
+                                                                'gilet',
+                                                                'equipement_autre',
+                                                                'grav')
+                                                   )
+                                       ),
                              actionButton('parametres13','Valider')
                       ),
-                      column(width = 8,
+                      column(width = 7,
                              DTOutput("donnees")
-                      )
-             )
+                             )
            ))
-)
+))

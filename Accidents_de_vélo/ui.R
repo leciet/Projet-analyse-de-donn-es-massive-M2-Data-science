@@ -10,10 +10,13 @@
 library(shiny)
 library(leaflet)
 library(DT)
+library(shinyjs)
+library(jsonlite)
 
 # Define UI for application that draws a histogram
 shinyUI(
   navbarPage(title = "Accidents de vélo en France",
+             useShinyjs(),
              # 1er onglet description ==========================================
              source("ui/ui_description.R",local = TRUE)$value,
              

@@ -12,6 +12,6 @@ library(tidyverse)
 
 # Define server logic required to draw a histogram
 shinyServer(function(input, output, session) {
-  source("server/server_map.R", local = TRUE)
+  source("server/server_description.R", local = TRUE)
 })
 
