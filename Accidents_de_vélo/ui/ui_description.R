@@ -70,7 +70,15 @@ tabPanel(title = "Description",
                                                                 'gilet',
                                                                 'equipement_autre',
                                                                 'grav')
-                                                   )
+                                                   ),
+                                       # choix des dates 
+                                       dateRangeInput(inputId = "dateDt1", 
+                                                      label = NULL,
+                                                      start = "2005-01-01", 
+                                                      end = "2021-12-31", 
+                                                      format = "dd/mm/yyyy",
+                                                      language = "fr", 
+                                                      separator = " à ")
                                        ),
                              actionButton('parametres13','Valider')
                       ),

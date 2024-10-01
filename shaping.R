@@ -108,8 +108,8 @@ levels(dta$grav) <- c("Indemne",
 
 dta$sexe <- factor(dta$sexe)
 levels(dta$sexe) <- c("Sexe NA",
-                      "Masculin",
-                      "Feminin")
+                      "Homme",
+                      "Femme")
 
 # les modalités -1 et 0 de trajet sont similaires donc on remplace les -1 par des 0
 dta$trajet[dta$trajet==-1] <- 0

@@ -16,7 +16,7 @@ library(sf)
 output$leaflet <- renderLeaflet({
   input$parametres11
   isolate({
-    Palette <- colorFactor(palette = c("orange2",'yellow2',"lightgreen", "red2"),
+    Palette <- colorFactor(palette = c("tomato",'skyblue2',"royalblue", "red3"),
                            domain = c('Indemne','Blessé léger','Blessé hospitalisé','Tué'))
     dta <- don %>% 
       filter(date<=input$dateMap1[2]) %>% 
@@ -24,7 +24,11 @@ output$leaflet <- renderLeaflet({
     dta <- filter(dta,grav == input$gravMap1)
     m <- leaflet(data = dta) %>% 
       addTiles()%>%
-      setView( lng = 2, lat = 46, zoom = 5 )
+      setView( lng = 2, lat = 46, zoom = 5 ) %>% 
+      addLegend(values = ~grav,
+                    pal = Palette,
+                    position = 'bottomright',
+                    title = "Gravité des blessures")
     if(input$clusterMap1==FALSE){
       m <- m %>% addCircleMarkers(~long,~lat,
                                   color = ~Palette(grav),
@@ -32,22 +36,23 @@ output$leaflet <- renderLeaflet({
       }else{
         m <- m %>% addCircleMarkers(~long,~lat,
                                     color = ~Palette(grav),popup = paste(
-                                      dta$sexe , dta$age , "<BR>",
+                                      dta$sexe , dta$age , " ans<BR>",
                                       "<B>Casque</B>: ", dta$casque, "<BR>",
                                       "<B>Gilet réfléchissant</B>: ", dta$gilet, "<BR>",
-                                      "<B>Autre</B>: ", dta$equipement_autre)) %>% 
-          addLegend(values = ~grav,
-                    pal = Palette,
-                    position = 'bottomright',
-                    title = "Gravité des blessures")
+                                      "<B>Autre</B>: ", dta$equipement_autre, "<BR>"))
         } 
     m
   })
 })
 
 
-output$donnees <- renderDT({datatable(don[,input$coldt])}
-                           )
+output$donnees <- renderDT({
+  input$parametres13
+  isolate({datatable(don[,input$coldt] %>% 
+                                        filter(date<=input$dateDt1[2]) %>% 
+                                        filter(date >=input$dateDt1[1]) )
+    })
+  })
 
 
 
