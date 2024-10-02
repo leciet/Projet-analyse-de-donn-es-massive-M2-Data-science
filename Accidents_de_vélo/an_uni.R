@@ -45,5 +45,10 @@ output$graph_uni <- renderPlotly({
                        "à",
                        input$annee[2]))
   
+  if (nlevels(don[,input$varuni]) > 5){
+    ggp <- ggp +
+      theme(axis.text.x = element_text(angle = 30, vjust = 0.5, hjust=1))
+  }
+  
   ggplotly(ggp, tooltip = 'text')
 })
