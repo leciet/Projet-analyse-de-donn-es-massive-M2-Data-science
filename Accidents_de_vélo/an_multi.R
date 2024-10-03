@@ -1,8 +1,6 @@
 
 library(FactoMineR)
 
-don$an <- as.factor(don$an)
-
 don$age <- case_when(
   don$age < 20 ~ "13-19 ans",
   don$age < 40 ~ "20-39 ans",
@@ -19,6 +17,7 @@ levels(don$gilet) = c('Non', 'Oui')
 
 
 output$plot_CA <- renderPlot({
+  don$an <- as.factor(don$an)
   
   tab <- table(don$grav, don[,input$var_ac])
   
@@ -32,6 +31,7 @@ output$plot_MCA_ind <- renderPlot({
   input$constr_acm
   
   isolate({
+    don$an <- as.factor(don$an)
     
     ind_actif <- which(names(don) %in% input$var_acm)
     ind_illus <- which(names(don) == 'grav')
@@ -46,6 +46,7 @@ output$plot_MCA_var <- renderPlot({
   input$constr_acm
   
   isolate({
+    don$an <- as.factor(don$an)
     
     ind_actif <- which(names(don) %in% input$var_acm)
     ind_illus <- which(names(don) == 'grav')
