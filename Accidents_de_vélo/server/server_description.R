@@ -35,7 +35,8 @@ output$leaflet <- renderLeaflet({
                                   clusterOptions = markerClusterOptions())
       }else{
         m <- m %>% addCircleMarkers(~long,~lat,
-                                    color = ~Palette(grav),popup = paste(
+                                    color = ~Palette(grav),
+                                    popup = paste(
                                       dta$sexe , dta$age , " ans<BR>",
                                       "<B>Casque</B>: ", dta$casque, "<BR>",
                                       "<B>Gilet réfléchissant</B>: ", dta$gilet, "<BR>",
