@@ -31,6 +31,9 @@ output$graph_uni <- renderPlotly({
   levels(don$casque) = c('Non', 'Oui')
   levels(don$gilet) = c('Non', 'Oui')
   
+  names(don)[names(don) == 'grav'] = 'Gravité'
+  
+  if (input$by_grav == 'Total'){
   ggp <- ggplot(don) + aes(x = .data[[input$varuni]], 
                            text = after_stat(paste(noms_vars[input$varuni],
                                                    ':',
@@ -44,6 +47,35 @@ output$graph_uni <- renderPlotly({
                        input$annee[1],
                        "à",
                        input$annee[2]))
+  } else {
+    don2 <- don |>
+      count(get(input$varuni), Gravité, name = 'n')
+    names(don2)[1] <- input$varuni
+    
+    don_tot <- don2 |>
+      group_by(get(input$varuni)) |>
+      summarise(N = sum(n))
+    names(don_tot)[1] <- input$varuni
+    
+    don2 <- inner_join(don2,don_tot, by = input$varuni) |>
+      mutate(prop = 100*n/N)
+    
+    ggp <- ggplot(don2) + aes(x = .data[[input$varuni]],
+                              fill = Gravité,
+                              y = n,
+                              text = paste('Gravité :',
+                                          Gravité,
+                                          '<br>Proportion :',
+                                          round(prop,1),
+                                          '%')) +
+      geom_col(alpha = 0.8, position = 'fill') +
+      labs(x = noms_vars[input$varuni],
+           y = "Proportion des accidents",
+           title = paste("Accidents de",
+                         input$annee[1],
+                         "à",
+                         input$annee[2]))
+  }
   
   if (nlevels(don[,input$varuni]) > 5){
     ggp <- ggp +

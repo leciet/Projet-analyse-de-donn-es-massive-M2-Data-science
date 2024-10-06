@@ -65,9 +65,8 @@ navbarPage(title = "Accidents de vélo en France",
                       tabPanel("Analyse univariée",
                                fluidPage(
                                  h2("Analyse univariée"),
-                                 p("Représentez le nombre d'accidents en fonction d'une des variables de la liste à gauche ci-dessous."),
-                                 br(),
-                                 p("Vous pouvez également choisir la plage temporelle."),
+                                 p("Représentez la répartition des accidents en fonction de l'une des variables de la liste à gauche ci-dessous."),
+                                 p("Vous pouvez, au choix, comparer les nombres totaux d'accidents ou la répartition de la gravité des accidents."),
                                  p(em("Remarque : les incidents nocturnes, de 0:00 à 9:00, n'ont été enregistrés que depuis 2019.")),
                                  br(),
                                  hr(),
@@ -86,9 +85,16 @@ navbarPage(title = "Accidents de vélo en France",
                                                              min = 2005,
                                                              max = 2021,
                                                              value = c(2005, 2021),
-                                                             sep = '')),
+                                                             sep = ''),
+                                                 selectInput('by_grav',
+                                                             label = "Nombre d'accidents",
+                                                             choices = c('Total', 'Par gravité'))),
                                           column(9,
-                                                 plotlyOutput('graph_uni'))))),
+                                                 plotlyOutput('graph_uni')
+                                                 )
+                                          )
+                                 )
+                               ),
                       
                       tabPanel("Analyse multivariée",
                                fluidPage(
