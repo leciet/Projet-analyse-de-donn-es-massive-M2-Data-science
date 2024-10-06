@@ -1,12 +1,4 @@
 
-# ------------------------------------------------------------------------------
-#  16/09/2024
-#  Petit script pépou pour voir les données
-#  par moi
-#  description à changer avant envoi faut pas abuser
-# ------------------------------------------------------------------------------
-
-
 # Packages et environnement ----------------------------------------------------
 
 rm(list=ls()) # clean environment 
@@ -53,7 +45,7 @@ dta <- subset(dta,
 # typevehicules
 
 
-# Changement des noms des modalités 
+# Changement des noms des modalités --------------------------------------------
 
 dta$agg <- factor(dta$agg)
 levels(dta$agg) <- c("Hors agglomération",
@@ -138,7 +130,6 @@ dta$equipement_autre <- str_count(dta$equipement,"9")
 
 don <- dta
 
-
 don$date <- as.Date(don$date)
 don$mois <- fct_relevel(don$mois,
                         c("janvier", "février", "mars", "avril",
@@ -157,6 +148,11 @@ don <- don[-ind_dep,]
 ind_coord <- which(don$lat == 0 & don$long == 0)
 don$lat[ind_coord] <- NA
 don$long[ind_coord] <- NA
+
+don$grav <- forcats::fct_relevel(don$grav, "Indemne", 
+                                 "Blessé léger", 
+                                 "Blessé hospitalisé",
+                                 "Tué")
 
 ind_age <- !(don$age > 80 | is.na(don$age) | don$age < 13)
 don <- don[ind_age,] 
