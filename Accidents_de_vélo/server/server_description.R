@@ -57,5 +57,4 @@ output$donnees <- renderDT({
 
 
 
-don %>% filter(date<='2005-1-19') %>% 
-  filter(date >= '2005-1-19')
+
