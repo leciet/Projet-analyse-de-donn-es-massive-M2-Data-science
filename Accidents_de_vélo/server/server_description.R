@@ -46,9 +46,9 @@ output$leaflet <- renderLeaflet({
 
 output$donnees <- renderDT({
   input$parametres13
-  isolate({datatable(don[,input$coldt] %>% 
-                                        filter(date<=input$dateDt1[2]) %>% 
-                                        filter(date >=input$dateDt1[1]) )
+  isolate({don[,input$coldt13] %>% 
+      filter(date<=input$dateDt1[2]) %>%
+      filter(date >=input$dateDt1[1])
     })
   })
 

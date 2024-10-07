@@ -7,19 +7,12 @@
 #    https://shiny.posit.co/
 #
 
-library(shiny)
-library(tidyverse)
-library(DT)
-
-load("don.RData")
-
-
-# Define server logic required to draw a histogram
-
+  
+  
 shinyServer(function(input, output, session) {
-  # Charger les données
   load("don.RData")
-  cd <- read_excel("server/Centre_departement.xlsx", skip = 1)
+  # Define server logic required to draw a histogram
+  cd <- read_excel("Centre_departement.xlsx", skip = 1)
   cd$`ɸ (° ' "")` <- gsub(" ", "", cd$`ɸ (° ' "")`)
   cd$`ɸ (° ' "")` <- char2dms(cd$`ɸ (° ' "")`, chd='°', chm="'", chs='"') %>% as.numeric()
   cd$`Ʌ (° ' "")` <- char2dms(cd$`Ʌ (° ' "")`, chd='°', chm="'", chs='"') %>% as.numeric()
@@ -83,6 +76,7 @@ shinyServer(function(input, output, session) {
       pourcentage_hommes = (hommes / nombre_lignes) * 100
     ) %>%
     select(dep, nombre_lignes, pourcentage_femmes, pourcentage_hommes, lat, long)
+  # Charger les données
   source("server/server_description.R", local = TRUE)
   source("server/server_spatio_temp.R", local = TRUE)
   source("an_uni.R", local = T)
