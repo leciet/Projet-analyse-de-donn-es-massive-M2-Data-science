@@ -18,7 +18,7 @@ load("don.RData")
 
 shinyServer(function(input, output, session) {
   # Charger les données
-  load("server/don.RData")
+  load("don.RData")
   cd <- read_excel("server/Centre_departement.xlsx", skip = 1)
   cd$`ɸ (° ' "")` <- gsub(" ", "", cd$`ɸ (° ' "")`)
   cd$`ɸ (° ' "")` <- char2dms(cd$`ɸ (° ' "")`, chd='°', chm="'", chs='"') %>% as.numeric()
