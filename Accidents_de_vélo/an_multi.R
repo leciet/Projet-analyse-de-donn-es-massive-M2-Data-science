@@ -43,6 +43,10 @@ output$plot_MCA_ind <- renderPlot({
 
 output$plot_MCA_var <- renderPlot({
   
+  observe({
+    shinyjs::toggleState("constr_acm", condition = length(input$var_acm) > 2)
+  })
+  
   input$constr_acm
   
   isolate({

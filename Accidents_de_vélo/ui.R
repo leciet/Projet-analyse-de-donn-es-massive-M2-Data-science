@@ -100,7 +100,7 @@ navbarPage(title = "Accidents de vélo en France",
                                fluidPage(
                                  h2("Analyse multivariée"),
                                  p( HTML("Deux types d'analyses sont disponibles : 
-                                   <ul> <li> une ACM (Analyse des Correspondances Multiples) sur les variables de votre choix ; </li>
+                                   <ul> <li> une ACM (Analyse des Correspondances Multiples) sur au moins 3 variables de votre choix ; </li>
                                    <li> une AC (Analyse des Correspondances) mettant en relation la gravité d'un accident et une variable de votre choix. </li>
                                    </ul> ")),
                                  p(em("Remarque : la construction de l'ACM peut prendre plusieurs secondes.")),
@@ -110,6 +110,7 @@ navbarPage(title = "Accidents de vélo en France",
                                    tabPanel("ACM",
                                             br(),
                                             fluidRow(
+                                              shinyjs::useShinyjs(),
                                               column(2,
                                                      checkboxGroupInput("var_acm",
                                                                         label = "Variables actives :",
