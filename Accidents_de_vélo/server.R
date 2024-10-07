@@ -9,9 +9,13 @@
 
 library(shiny)
 library(tidyverse)
+library(DT)
+
+load("don.RData")
 
 
 # Define server logic required to draw a histogram
+
 shinyServer(function(input, output, session) {
   # Charger les données
   load("server/don.RData")
@@ -81,5 +85,7 @@ shinyServer(function(input, output, session) {
     select(dep, nombre_lignes, pourcentage_femmes, pourcentage_hommes, lat, long)
   source("server/server_description.R", local = TRUE)
   source("server/server_spatio_temp.R", local = TRUE)
+  source("an_uni.R", local = T)
+  source("an_multi.R", local = T)
   })
 

@@ -22,9 +22,10 @@ library(shinyalert)
 library(tidyverse)  # Load the tidyverse package
 library(shiny)
 library(jsonlite)
+library(plotly)
 
-
-
+# load('server/don.RData')
+var_analyse <- names(don)[c(2:5,10:18,20,21)]
 # Define UI for application that draws a histogram
 shinyUI(
   navbarPage(title = "Accidents de vélo en France",
@@ -59,13 +60,13 @@ shinyUI(
              # 1er onglet description ==========================================
              source("ui/ui_description.R",local = TRUE)$value,
              
-             # 2ème onglet analyse stats =======================================
-             navbarMenu("Analyse",
-                        tabPanel("Analyse univariée"),
-                        tabPanel("Analyse bivariée"),
-                        tabPanel("Analyse multivariée")
-                        ),
+             # 2ème onglet analyse stats =========================================
+             source("ui/ui_analyse.R",local = TRUE)$value,
              # 3ème onglet analyse spatio-temp ===================================
              source("ui/ui_spatio_temp.R",local = TRUE)$value
              )
   )
+
+
+
+
