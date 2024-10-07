@@ -24,7 +24,7 @@ output$leaflet <- renderLeaflet({
     dta <- filter(dta,grav == input$gravMap1)
     m <- leaflet(data = dta) %>% 
       addTiles()%>%
-      setView( lng = 2, lat = 46, zoom = 5 ) %>% 
+      setView( lng = 2, lat = 46.5, zoom = 6 ) %>% 
       addLegend(values = ~grav,
                     pal = Palette,
                     position = 'bottomright',
