@@ -23,6 +23,8 @@ library(tidyverse)  # Load the tidyverse package
 library(shiny)
 library(jsonlite)
 
+
+
 # Define UI for application that draws a histogram
 shinyUI(
   navbarPage(title = "Accidents de vélo en France",
@@ -63,7 +65,7 @@ shinyUI(
                         tabPanel("Analyse bivariée"),
                         tabPanel("Analyse multivariée")
                         ),
-           # 3ème onglet analyse spatio-temp ===================================
-           source("ui/ui_spatio_temp.R",local = TRUE)$value
-           )
-)
+             # 3ème onglet analyse spatio-temp ===================================
+             source("ui/ui_spatio_temp.R",local = TRUE)$value
+             )
+  )

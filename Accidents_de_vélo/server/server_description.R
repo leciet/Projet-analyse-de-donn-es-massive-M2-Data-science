@@ -9,9 +9,6 @@ if (is.null(input$gravMap1)) {
     shinyjs::enable("parametres11")
   })
 
-# Let's read the downloaded geoJson file with the sf library:
-library(sf)
-# dep <- read_sf('Accidents_de_vélo/server/departements.geojson')
 
 output$leaflet <- renderLeaflet({
   input$parametres11

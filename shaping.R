@@ -168,5 +168,5 @@ don$sexe <- droplevels(don$sexe)
 
 summary(don)
 
-save(don, file = "don.RData")
+save(don, file = "Accidents_de_vélo/don.RData")
 
