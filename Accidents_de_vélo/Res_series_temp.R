@@ -84,3 +84,4 @@ df <- df[-ncol(df)]
 modt <- Arima(tst, c(0,0,0), xreg = as.matrix(df[,-1]))
 
 rm(df,x,t)
+

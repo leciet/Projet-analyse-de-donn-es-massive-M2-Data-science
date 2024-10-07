@@ -9,9 +9,10 @@ navbarMenu(
         fluidRow(
           column(
             width = 4,
-            wellPanel("Chiffres par sexe", style = "background: lightblue"),
-            selectInput("selected_dep", "Sélectionnez un département", choices = unique(data$dep)),
-            selectInput("selected_year", "Sélectionnez une année", choices = unique(data$an)),
+            wellPanel(h2("Paramètres"),
+                      selectInput("selected_dep", "Sélectionnez un département", 
+                                  choices = unique(data$dep)),
+                      selectInput("selected_year", "Sélectionnez une année", choices = unique(data$an))),
             actionButton('param_sexe', 'Valider'),
             actionButton('param_sexe_2', 'réinitialiser')  # Nouveau bouton ici
             ),
@@ -22,11 +23,10 @@ navbarMenu(
           )
         ),
       tabPanel(
-        "Évolution par gravité",
+        "Évolution en fonction de la gravité",
         fluidRow(
           column(
-            width = 2,
-            wellPanel("Evolution en fonction de la gravité", style = "background: lightcoral")
+            width = 2
             #actionButton('param_gravite', 'Valider')
           ),
           column(
@@ -40,38 +40,39 @@ navbarMenu(
         fluidRow(
           column(
             width = 3,
-            wellPanel("Formulaire", style = "background: lightgreen"),
-            selectInput("selected_dep2", "Département", choices = unique(data$dep), multiple = TRUE,
-                        tags$select(class = "custom-select")),
-            selectInput("selected_an", "Année", choices = unique(data$an), multiple = TRUE,
-                        tags$select(class = "custom-select")),
-            selectInput("selected_mois", "Mois", choices = unique(data$mois), multiple = TRUE,
-                        tags$select(class = "custom-select")),
-            selectInput("selected_lum", "Luminosité", choices = unique(data$lum), multiple = TRUE,
-                        tags$select(class = "custom-select")),
-            selectInput("selected_atm", "Atmosphère", choices = unique(data$atm), multiple = TRUE,
-                        tags$select(class = "custom-select")),
-            selectInput("selected_catr", "Catégorie", choices = unique(data$catr), multiple = TRUE,
-                        tags$select(class = "custom-select")),
-            selectInput("selected_grav", "Gravité", choices = unique(data$grav), multiple = TRUE,
-                        tags$select(class = "custom-select")),
-            selectInput("selected_surf", "Surface", choices = unique(data$surf), multiple = TRUE,
-                        tags$select(class = "custom-select")),
-            selectInput("selected_sexe", "Sexe", choices = unique(data$sexe), multiple = TRUE,
-                        tags$select(class = "custom-select")),
-            selectInput("selected_age", "Âge", choices = unique(data$age), multiple = TRUE,
-                        tags$select(class = "custom-select")),
-            selectInput("selected_trajet", "Trajet", choices = unique(data$trajet), multiple = TRUE,
-                        tags$select(class = "custom-select")),
-            selectInput("selected_equipement", "Équipement", choices = unique(data$equipement), multiple = TRUE,
-                        tags$select(class = "custom-select")),
-            selectInput("selected_casque", "Casque", choices = unique(data$casque), multiple = TRUE,
-                        tags$select(class = "custom-select")),
-            selectInput("selected_git", "Git", choices = unique(data$git), multiple = TRUE,
-                        tags$select(class = "custom-select")),
-            selectInput("selected_equipement_autre", "Équipement Autre", choices = unique(data$equipement_autre), multiple = TRUE,
-                        tags$select(class = "custom-select")),
-            actionButton('val_frm', 'Valider')
+            wellPanel(h2("Paramètres"),
+                      selectInput("selected_dep2", "Département*", choices = unique(data$dep), multiple = TRUE,
+                                  tags$select(class = "custom-select")),
+                      selectInput("selected_an", "Année*", choices = unique(data$an), multiple = TRUE,
+                                  tags$select(class = "custom-select")),
+                      selectInput("selected_mois", "Mois*", choices = unique(data$mois), multiple = TRUE,
+                                  tags$select(class = "custom-select")),
+                      selectInput("selected_lum", "Luminosité", choices = unique(data$lum), multiple = TRUE,
+                                  tags$select(class = "custom-select")),
+                      selectInput("selected_atm", "Atmosphère", choices = unique(data$atm), multiple = TRUE,
+                                  tags$select(class = "custom-select")),
+                      selectInput("selected_catr", "Catégorie", choices = unique(data$catr), multiple = TRUE,
+                                  tags$select(class = "custom-select")),
+                      selectInput("selected_grav", "Gravité", choices = unique(data$grav), multiple = TRUE,
+                                  tags$select(class = "custom-select")),
+                      selectInput("selected_surf", "Surface", choices = unique(data$surf), multiple = TRUE,
+                                  tags$select(class = "custom-select")),
+                      selectInput("selected_sexe", "Sexe", choices = unique(data$sexe), multiple = TRUE,
+                                  tags$select(class = "custom-select")),
+                      selectInput("selected_age", "Âge", choices = unique(data$age), multiple = TRUE,
+                                  tags$select(class = "custom-select")),
+                      selectInput("selected_trajet", "Trajet", choices = unique(data$trajet), multiple = TRUE,
+                                  tags$select(class = "custom-select")),
+                      selectInput("selected_equipement", "Équipement", choices = unique(data$equipement), multiple = TRUE,
+                                  tags$select(class = "custom-select")),
+                      selectInput("selected_casque", "Casque", choices = unique(data$casque), multiple = TRUE,
+                                  tags$select(class = "custom-select")),
+                      selectInput("selected_git", "Git", choices = unique(data$git), multiple = TRUE,
+                                  tags$select(class = "custom-select")),
+                      selectInput("selected_equipement_autre", "Équipement Autre", choices = unique(data$equipement_autre), multiple = TRUE,
+                                  tags$select(class = "custom-select"))),
+            actionButton('val_frm', 'Valider'),
+            HTML("<i style = 'color:red'>* Champs obligatoires</i>")
           ),
           column(
             width = 8,
@@ -96,25 +97,24 @@ navbarMenu(
       tabPanel("Serie temporelle", 
                 sidebarLayout(
                   sidebarPanel(
-                    sliderInput("yearInput", 
-                                "Choisissez une année pour la prévision :",
-                                min = min(accidents_by_year$year), 
-                                max = max(accidents_by_year$year) + 24, # Allow forecasting into the future
-                                value = max(accidents_by_year$year))
+                    h2("Paramètres"),
+                    selectInput('type_ts', choices = levels(don$grav),label = 'Gravité des blessures'),
+                    selectInput('annee_pred', choices = c(as.character(2022:2040)),label = 'Année de prévision')
                     ),
                    
                   mainPanel(
-                    plotOutput("forecastPlot")))
+                    plotlyOutput("graph_ts")))
         ))),
   tabPanel(
     "Prédiction",
     fluidRow(
       column(
         width = 12,
-        wellPanel("Modèle de prédiction", style = "background: lightyellow"),
+        wellPanel(h1("Modèle de prédiction"),
+                  h2("Paramètres"),
         selectInput("selected_depp", "Sélectionnez un département", choices = unique(data$dep)),
         selectInput("selected_yearr", "Sélectionnez une année", choices = unique(seq(max(data$an) + 1, max(data$an) + 30))),
-        actionButton('param_pred', 'Afficher la prédiction')
+        actionButton('param_pred', 'Afficher la prédiction'))
           #textOutput("prediction_result"),
           
           # Carte de gravité ici

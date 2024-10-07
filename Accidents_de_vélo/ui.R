@@ -23,12 +23,16 @@ library(tidyverse)  # Load the tidyverse package
 library(shiny)
 library(jsonlite)
 library(plotly)
+library(bslib)
+library(anytime)
+library(fabletools)
 
 # load('server/don.RData')
 var_analyse <- names(don)[c(2:5,10:18,20,21)]
 # Define UI for application that draws a histogram
 shinyUI(
-  navbarPage(title = "Accidents de vélo en France",
+  navbarPage(theme = bs_theme(version = 5, bootswatch = "sandstone"),
+             title = "Accidents de vélo en France",
              # Ajout de CSS pour forcer l'occupation de la hauteur complète
              tags$head(
                tags$style(

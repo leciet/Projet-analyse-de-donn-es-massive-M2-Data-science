@@ -9,9 +9,9 @@ tabPanel(title = "Description",
            tabsetPanel(
              # Carte générale -- -- -- -- -- -- -- -- -- -- -- -- --
              tabPanel("Carte",
-                      column(width = 4,
+                      fluidRow(
+                        column(width = 4,
                              wellPanel(h2("Paramètres"),
-                                       style = "background : skyblue",
                                        # clustering 
                                        checkboxInput(inputId = 'clusterMap1',
                                                      label = "Détailler la carte",
@@ -34,33 +34,37 @@ tabPanel(title = "Description",
                                                       separator = " à ")
                                        ),
                              actionButton('parametres11','Valider',disabled = TRUE),
-                             HTML("<h5 style = 'color:red'>* Sélectionner au moins 1 argument</h5>")
+                             HTML("<i style = 'color:red'>* Sélectionner au moins 1 argument</i>")
                       ),
                       column(width = 8,
-                             leafletOutput("leaflet")
-                      )
+                             leafletOutput("leaflet")))
              ),
              
              # Graphiques de base -- -- -- -- -- -- -- -- -- -- -- --
              tabPanel("Graphiques",
-                      column(width = 4,
-                             wellPanel("Paramètres",
-                                       style = "background : lightgreen"),
-                             actionButton('parametres12','Valider')
-                      ),
-                      column(width = 8
+                      fluidRow(
+                        column(width = 4,
+                             wellPanel(h2("Paramètres"),
+                                       radioButtons('typegraph12',
+                                                    label = 'Type de graphique',
+                                                    choices = c('Total','Par gravité'),
+                                                    selected = 'Total'),
+                                       actionButton('parametres12','Valider')
+                      )),
+                      column(width = 8,
+                             plotlyOutput('graph12'))
                       )
              ),
              
              # Table de données -- -- -- -- -- -- -- -- -- -- -- -- 
              tabPanel("Données",
-                      column(width = 4,
+                      fluidRow(
+                        column(width = 4,
                              wellPanel(h2("Paramètres"),
-                                       style = "background : khaki",
-                                       selectInput(inputId = "coldt13",
+                                       selectInput(inputId = "colDt1",
                                                    label = "Sélection des colonnes",
                                                    multiple = TRUE,
-                                                   choices = colnames(don),
+                                                   choices = colnames(data),
                                                    selected = c('date',
                                                                 'dep',
                                                                 'sexe',
@@ -83,7 +87,7 @@ tabPanel(title = "Description",
                              actionButton('parametres13','Valider')
                       ),
                       column(width = 7,
-                             DTOutput("donnees")
-                             )
+                             DTOutput("donnees1")
+                             ))
            ))
 ))

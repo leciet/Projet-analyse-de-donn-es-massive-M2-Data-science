@@ -68,8 +68,8 @@ shinyServer(function(input, output, session) {
       lat = mean(lat_ancien, na.rm = TRUE),
       long = mean(long_ancien, na.rm = TRUE),
       nombre_lignes = n(),
-      femmes = sum(sexe == "Feminin", na.rm = TRUE),
-      hommes = sum(sexe == "Masculin", na.rm = TRUE)
+      femmes = sum(sexe == "Femme", na.rm = TRUE),
+      hommes = sum(sexe == "Homme", na.rm = TRUE)
     ) %>%
     mutate(
       pourcentage_femmes = (femmes / nombre_lignes) * 100,
@@ -81,5 +81,6 @@ shinyServer(function(input, output, session) {
   source("server/server_spatio_temp.R", local = TRUE)
   source("an_uni.R", local = T)
   source("an_multi.R", local = T)
+  source("pred_ts.R",local = T)
   })
 

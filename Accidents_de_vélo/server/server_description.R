@@ -34,7 +34,7 @@ output$leaflet <- renderLeaflet({
         m <- m %>% addCircleMarkers(~long,~lat,
                                     color = ~Palette(grav),
                                     popup = paste(
-                                      dta$sexe , dta$age , " ans<BR>",
+                                      dta$sexe , dta$age , "<BR>",
                                       "<B>Casque</B>: ", dta$casque, "<BR>",
                                       "<B>Gilet réfléchissant</B>: ", dta$gilet, "<BR>",
                                       "<B>Autre</B>: ", dta$equipement_autre, "<BR>"))
@@ -43,15 +43,36 @@ output$leaflet <- renderLeaflet({
   })
 })
 
-
-output$donnees <- renderDT({
+output$donnees1 <- renderDT({
   input$parametres13
-  isolate({don[,input$coldt13] %>% 
+  isolate({don[,input$colDt1] %>% 
       filter(date<=input$dateDt1[2]) %>%
       filter(date >=input$dateDt1[1])
     })
   })
 
+
+output$graph12 <- renderPlotly({
+  input$parametres12
+  isolate({
+    if (input$typegraph12=='Total') {
+    graph12 <- don %>% 
+      ggplot()+
+      aes(x=an)+
+      geom_density(aes(y=after_stat(count)),position = 'stack',fill='grey')+
+      ylab("Nombre d'accidents")+
+      xlab("Année")
+  } else {
+    graph12 <- don %>% 
+      ggplot()+
+      aes(x=an,fill = grav)+
+      geom_density(aes(y=after_stat(count)),position = 'stack')+
+      ylab("Nombre d'accidents")+
+      xlab("Année")
+  }
+    ggplotly(graph12,tooltip = 'text')})
+  
+})
 
 
 

@@ -9,7 +9,9 @@ navbarMenu("Analyse",
                       hr(),
                       
                       fluidRow(column(3,
-                                      selectInput('varuni',
+                                      wellPanel(
+                                        h2('Paramètres'),
+                                        selectInput('varuni',
                                                   label = 'Variable à représenter',
                                                   choices = setNames(var_analyse,
                                                                      c("Année", "Mois", "Jour", "Heure",
@@ -25,7 +27,8 @@ navbarMenu("Analyse",
                                                   sep = ''),
                                       selectInput('by_grav',
                                                   label = "Nombre d'accidents",
-                                                  choices = c('Total', 'Par gravité'))),
+                                                  choices = c('Total', 'Par gravité')))
+                                      ),
                                column(9,
                                       plotlyOutput('graph_uni')
                                )
@@ -49,17 +52,21 @@ navbarMenu("Analyse",
                                  fluidRow(
                                    shinyjs::useShinyjs(),
                                    column(2,
-                                          checkboxGroupInput("var_acm",
-                                                             label = "Variables actives :",
+                                          wellPanel(
+                                            h2('Paramètres'),
+                                            checkboxGroupInput("var_acm",
+                                                             label = "Variables actives :*",
                                                              choices = setNames(var_analyse[- which(var_analyse == "grav")],
                                                                                 c("Année", "Mois", "Jour", "Heure",
                                                                                   "Agglomération", "Luminosité", "Météo", 
                                                                                   "Type de route", "Type de surface", 
                                                                                   "Sexe", "Âge", "Type de trajet", 
                                                                                   "Port de casque", "Port de gilet")),
-                                                             selected = var_analyse[c(5:9, 13:15)]),
+                                                             selected = var_analyse[c(5:9, 13:15)])
+                                            ),
                                           actionButton("constr_acm", 
                                                        "Construire l'ACM"),
+                                          HTML("<i style = 'color:red'>* Sélectionner au moins 3 arguments</i>"),
                                           br()),
                                    
                                    column(5,
@@ -72,12 +79,15 @@ navbarMenu("Analyse",
                         tabPanel("AC",
                                  br(),
                                  fluidRow(column(2,
-                                                 selectInput('var_ac',
+                                                 wellPanel(
+                                                   h2('Paramètres'),
+                                                   selectInput('var_ac',
                                                              label = 'Variable à représenter',
                                                              choices = setNames(var_analyse[-c(5,10,11,14:15)],
                                                                                 c("Année", "Mois", "Jour", "Heure",
                                                                                   "Luminosité", "Météo", "Type de route", 
-                                                                                  "Type de surface", "Âge", "Type de trajet"))),
+                                                                                  "Type de surface", "Âge", "Type de trajet")))
+                                                   ),
                                                  p(em("Remarque : les variables à 2 modalités ont été retirées."))),
                                           
                                           column(10,
