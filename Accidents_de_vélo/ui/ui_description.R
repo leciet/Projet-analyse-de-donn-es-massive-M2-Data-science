@@ -2,6 +2,7 @@ tabPanel(title = "Description",
          HTML("<h1> Contexte </h1>
                           <body> Selon l'Observatoire national interministériel de la sécurité routière (ONISR), un cycliste a <b>trois fois plus</b> de risques d’être impliqué dans un accident qu’un automobiliste, et <b>seize fois plus</b> de chances d’être gravement blessé. <br/>
                           Pour réduire ces risques, le gouvernement a mis en place plusieurs mesures : port obligatoire du gilet réfléchissant, système d’éclairage et sonore, et recommandation du port du casque. Le développement des pistes cyclables et les campagnes de sensibilisation accompagnent ces actions. En 2018, la vitesse sur les routes départementales a aussi été réduite à 80 km/h. Mais ces mesures suffisent-elles ? </body><br/>
+                          <br/>
                           <h4>Le nombre et la gravité des accidents ont-ils diminué, et observe-t-on une meilleure adoption des équipements de sécurité ces dernières années ?</h4>
                           <hr>"),
          fluidRow(
