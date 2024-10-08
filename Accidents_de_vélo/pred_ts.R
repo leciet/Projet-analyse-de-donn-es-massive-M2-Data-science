@@ -29,7 +29,7 @@ output$graph_ts <- renderPlotly({
   df <- data.frame(t = t, cos = cos(x), sin = sin(x))
   df <- df[-ncol(df)]
   
-  fc <- generics::forecast(mod_choisi, h = nb_periodes, xreg = as.matrix(df))
+  fc <- generics::forecast(mod_choisi[[1]], h = nb_periodes, xreg = as.matrix(df))
   
   df_pred <- data.frame(Date = periodes_choisies,
                         Accidents = fc$mean,

@@ -48,9 +48,9 @@ tabPanel(title = "Description",
                                        radioButtons('typegraph12',
                                                     label = 'Type de graphique',
                                                     choices = c('Total','Par gravité'),
-                                                    selected = 'Total'),
+                                                    selected = 'Total')),
                                        actionButton('parametres12','Valider')
-                      )),
+                      ),
                       column(width = 8,
                              plotlyOutput('graph12'))
                       )
