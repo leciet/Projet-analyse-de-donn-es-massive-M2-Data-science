@@ -1,5 +1,7 @@
 # Carte ========================================================================
-observe( shinyjs::toggleState('parametres11', is.null(input$gravMap1)))
+observe( {
+  shinyjs::toggleState('parametres11', !is.null(input$gravMap1))
+  })
 
 output$leaflet <- renderLeaflet({
   input$parametres11
