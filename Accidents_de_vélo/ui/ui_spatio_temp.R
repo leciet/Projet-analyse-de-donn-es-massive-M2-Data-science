@@ -91,9 +91,9 @@ navbarMenu(
     tabsetPanel(
       tabPanel(
         "Évolution anuelle",
-        plotOutput("serieTemporellePlot")),
+        plotlyOutput("serieTemporellePlot")),
       tabPanel("Évolution mensuelle",
-                plotOutput("saisonalitePlot")),
+                plotlyOutput("saisonalitePlot")),
       tabPanel("Serie temporelle", 
                 sidebarLayout(
                   sidebarPanel(

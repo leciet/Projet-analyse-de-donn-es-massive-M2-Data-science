@@ -314,27 +314,36 @@ output$data_table <- renderDT({
   datatable(filtered)
 })
 
-output$saisonalitePlot <- renderPlot({
-  ggplot(don, aes(x = mois)) +
-    geom_bar() +
+output$saisonalitePlot <- renderPlotly({
+  gpl <- ggplot(don) + aes(x = mois, text = after_stat(paste("Mois : ", levels(don$mois)[x], "<br>Accidents : ", count, sep = ''))) +
+    geom_bar(alpha = 0.8, fill = 'lightblue') +
     labs(title = "Nombre d'accidents de vélo par mois (saisonnalité)", 
          x = "Mois", 
          y = "Nombre d'accidents") +
     theme_minimal()
+  
+  plotly::ggplotly(gpl, tooltip = 'text')
 })
 
-output$serieTemporellePlot <- renderPlot({
+output$serieTemporellePlot <- renderPlotly({
   accidents_ts <- ts(accidents_by_year$number_of_accidents, 
                      start = min(accidents_by_year$year), 
                      end = max(accidents_by_year$year), 
                      frequency = 1)
-  plot(accidents_ts, 
-       main = "Nombre d'accidents de vélo par année", 
-       xlab = "Année", 
-       ylab = "Nombre d'accidents")
+  
+  gpl <- ggplot(accidents_by_year) + 
+    aes(x = year, y = number_of_accidents, group = 1,
+        text = paste("Année : ", year, "<br>Accidents : ", number_of_accidents, sep = '')) +
+    geom_point() +
+    geom_line() +
+    labs(title = "Nombre d'accidents de vélo par année", 
+         x = "Année",
+         y = "Nombre d'accidents")
+  
+  plotly::ggplotly(gpl, tooltip = 'text')
 }) 
 # Prévisions ARIMA
-output$forecastPlot <- renderPlot({
+output$forecastPlot <- renderPlotly({
   # Ajuster le modèle ARIMA
   accidents_ts <- ts(accidents_by_year$number_of_accidents, 
                      start = min(accidents_by_year$year), 
