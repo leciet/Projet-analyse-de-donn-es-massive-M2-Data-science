@@ -6,18 +6,15 @@
 #
 #    https://shiny.posit.co/
 #
-library(installr)
-#updateR()
+
 library(forecast)
 library(tseries)
 library(leaflet)
 library(leaflet.minicharts)
 library(sp)
-library(magrittr)
 library(readxl)
 library(DT)
 library(shinyjs)
-#install.packages("shinyalert")
 library(shinyalert)
 library(tidyverse)  # Load the tidyverse package
 library(shiny)
@@ -26,10 +23,11 @@ library(plotly)
 library(bslib)
 library(anytime)
 library(fabletools)
+
 source("traitement_donnees.R")
-# load('server/don.RData')
+
 var_analyse <- names(don)[c(2:5,10:18,20,21)]
-# Define UI for application that draws a histogram
+
 shinyUI(
   navbarPage(theme = bs_theme(version = 5, bootswatch = "sandstone"),
              title = "Accidents de vélo en France",

@@ -1,14 +1,5 @@
 # Carte ========================================================================
-observe(
-# Verification que la gravite est selectionne pour la carte -- -- -- -- -- -- --
-if (is.null(input$gravMap1)) {
-  #Enable the run button
-  shinyjs::disable("parametres11")
-  } else {
-    #Disable the run button
-    shinyjs::enable("parametres11")
-  })
-
+observe( shinyjs::toggleState('parametres11', is.null(input$gravMap1)))
 
 output$leaflet <- renderLeaflet({
   input$parametres11

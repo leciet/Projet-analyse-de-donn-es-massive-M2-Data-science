@@ -444,6 +444,7 @@ observeEvent(input$param_pred, {
   #shinyjs::alert(prediction_text())
   shinyalert(prediction_text())
 })
+
 # Afficher un graphique des accidents prédits
 output$predPlot <- renderPlot({
   req(selected_data())

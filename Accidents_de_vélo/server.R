@@ -7,7 +7,7 @@
 #    https://shiny.posit.co/
 #
 
-source("traitement_donnees.R")
+source("server/traitement_donnees.R")
 shinyServer(function(input, output, session) {
   
   # Charger les données
