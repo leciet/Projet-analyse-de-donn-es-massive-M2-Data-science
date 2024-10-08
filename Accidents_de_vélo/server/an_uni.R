@@ -31,8 +31,6 @@ output$graph_uni <- renderPlotly({
   levels(don$casque) = c('Non', 'Oui')
   levels(don$gilet) = c('Non', 'Oui')
   
-  names(don)[names(don) == 'grav'] = 'Gravité'
-  
   if (input$by_grav == 'Total'){
   ggp <- ggplot(don) + aes(x = .data[[input$varuni]], 
                            text = after_stat(paste(noms_vars[input$varuni],
@@ -49,8 +47,10 @@ output$graph_uni <- renderPlotly({
                        input$annee[2]))
   } else {
     don2 <- don |>
-      count(get(input$varuni), Gravité, name = 'n')
+      count(get(input$varuni), grav, name = 'n')
     names(don2)[1] <- input$varuni
+    
+    if (names(don2)[1] == names(don2)[2]) don2 <- don2[-1]
     
     don_tot <- don2 |>
       group_by(get(input$varuni)) |>
@@ -60,7 +60,10 @@ output$graph_uni <- renderPlotly({
     don2 <- inner_join(don2,don_tot, by = input$varuni) |>
       mutate(prop = 100*n/N)
     
-    ggp <- ggplot(don2) + aes(x = .data[[input$varuni]],
+    names(don2)[names(don2) == 'grav'] = 'Gravité'
+    choix_x <- ifelse(input$varuni == 'grav', 'Gravité', input$varuni)
+    
+    ggp <- ggplot(don2) + aes(x = .data[[choix_x]],
                               fill = Gravité,
                               y = n,
                               text = paste('Gravité :',

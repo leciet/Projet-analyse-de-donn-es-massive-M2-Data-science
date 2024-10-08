@@ -27,7 +27,8 @@ navbarMenu("Analyse",
                                                   sep = ''),
                                       selectInput('by_grav',
                                                   label = "Nombre d'accidents",
-                                                  choices = c('Total', 'Par gravité')))
+                                                  choices = c('Total', 'Par gravité')),
+                                      actionButton('constr_uni', 'Valider'))
                                       ),
                                column(9,
                                       plotlyOutput('graph_uni')
