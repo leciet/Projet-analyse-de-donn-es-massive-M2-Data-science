@@ -14,8 +14,8 @@ output$graph_ts <- renderPlotly({
                         'Blessé hospitalisé' = modh,
                         'Tué' = modt)
   
-  ts_choisie <- liste_ts[levels(don$grav)] #input$type_ts
-  mod_choisi <- liste_modeles[levels(don$grav)]#input$type_ts
+  ts_choisie <- liste_ts[input$type_ts] #
+  mod_choisi <- liste_modeles[input$type_ts]#
   
   nb_periodes <- 12*(as.numeric(input$annee_pred) - 2021)
   periodes <- paste( rep(2022:2040, each = 12),
