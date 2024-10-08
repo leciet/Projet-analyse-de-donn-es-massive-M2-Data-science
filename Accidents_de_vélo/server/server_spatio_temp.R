@@ -96,11 +96,11 @@ observeEvent(input$param_sexe_2, {
 })
 
 result_ds <- data %>%
-  group_by(dep, an, grav) %>%
+  mutate(dep = as.factor(dep), an = as.factor(an)) %>%
+  group_by(dep, an, grav, .drop = FALSE) %>%
   summarise(count = n(), .groups = 'drop') %>%
   spread(key = grav, value = count, fill = 0) %>% # Spread severity levels into columns
   left_join(lat_long, by = "dep")
-severity_colors <- c("green", "yellow", "orange", "red")
 
 # Carte d'évolution par gravité
 output$map_gravite <- renderLeaflet({
@@ -112,11 +112,11 @@ output$map_gravite <- renderLeaflet({
     addMinicharts(
       lng = result_ds$long, 
       lat = result_ds$lat, 
-      chartdata = as.data.frame(result_ds[, c("Indemne", "Blessé léger", "Blessé hospitalisé", "Tué")]), # Vérifiez les noms de colonnes ici
-      type = "bar",
+      chartdata = as.data.frame(result_ds[, c("Indemne", "Blessé léger", "Blessé hospitalisé", "Tué")]),
+      type = "pie",
       time = result_ds$an,  # Définir l'année ici
-      colorPalette = severity_colors, # Utiliser la palette de couleurs définie
-      width = 70, height = 70
+      colorPalette = c("royalblue", 'skyblue', "tomato", "darkred"),
+      width = 20, height = 20
     )})
 
 
@@ -372,7 +372,7 @@ prediction_arima <- reactive({
   df <- df[-ncol(df)]
   
   mod <- Arima(accidents_ts, c(2,1,2), xreg = as.matrix(df[,-1])) # ordre (2,1,2) par sécurité
-
+  
   nb_periodes = 12*(as.numeric(input$selected_yearr) - 2021)
   
   t <- (length(accidents_ts) + 1):(length(accidents_ts) + nb_periodes)
@@ -387,7 +387,7 @@ prediction_arima <- reactive({
     tail(12) |>
     sum() |>
     round()
-    
+  
   return(pred_acc)
 })
 

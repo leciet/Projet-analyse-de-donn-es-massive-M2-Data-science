@@ -30,14 +30,7 @@ navbarMenu(
         tabPanel(
           "Représentation temporelle",
           fluidRow(
-            column(
-              width = 2
-              #actionButton('param_gravite', 'Valider')
-            ),
-            column(
-              width = 8,
-              leafletOutput("map_gravite")  # Carte de gravité ici
-            )
+            leafletOutput("map_gravite")  # Carte de gravité ici
           )
         ),
         tabPanel(
