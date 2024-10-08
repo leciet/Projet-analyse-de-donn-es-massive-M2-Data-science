@@ -4,21 +4,14 @@ data_global <- data %>%
     lat = mean(lat_ancien, na.rm = TRUE),
     long = mean(long_ancien, na.rm = TRUE),
     nombre_lignes = n(),
-    tués = sum(grav == "Tué", na.rm = TRUE),
-    hospi = sum(grav == "Blessé hospitalisé", na.rm = TRUE),
-    léger = sum(grav == "Blessé léger", na.rm = TRUE),
-    indem = sum(grav == "Indemne", na.rm = TRUE)
-    
+    femmes = sum(sexe == "Feminin", na.rm = TRUE),
+    hommes = sum(sexe == "Masculin", na.rm = TRUE)
   ) %>%
   mutate(
-    pourc_t = round((tués / nombre_lignes) * 100),
-    pourc_h = round((hospi / nombre_lignes) * 100),
-    pourc_l = round((léger / nombre_lignes) * 100),
-    pourc_i = round((indem / nombre_lignes) * 100)
+    pourcentage_femmes = (femmes / nombre_lignes) * 100,
+    pourcentage_hommes = (hommes / nombre_lignes) * 100
   ) %>%
-  select(dep, nombre_lignes, pourc_t, pourc_h, pourc_l, pourc_i, lat, long) %>%
-  dplyr::rename(Tués = pourc_t, Hospitalisés = pourc_h,
-                `Blessés légers` = pourc_l, Indemnes = pourc_i)
+  select(dep, nombre_lignes, pourcentage_femmes, pourcentage_hommes, lat, long)
 
 # Initialiser la carte `map_sexe` au démarrage
 output$map_sexe <- renderLeaflet({
@@ -29,8 +22,9 @@ output$map_sexe <- renderLeaflet({
     addMinicharts(
       data_global$long,
       data_global$lat,
-      chartdata = data_global[, c("Tués", "Hospitalisés", "Blessés légers", "Indemnes")],
+      chartdata = data_global[, c("pourcentage_hommes", "pourcentage_femmes")],
       type = "pie",
+      colorPalette = c("blue", "pink"),
       width = 20,
       height = 20,
       showLabels = TRUE
@@ -450,7 +444,6 @@ observeEvent(input$param_pred, {
   #shinyjs::alert(prediction_text())
   shinyalert(prediction_text())
 })
-
 # Afficher un graphique des accidents prédits
 output$predPlot <- renderPlot({
   req(selected_data())
