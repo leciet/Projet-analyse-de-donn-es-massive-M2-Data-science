@@ -59,14 +59,14 @@ output$graph12 <- renderPlotly({
     graph12 <- don %>% 
       ggplot()+
       aes(x=an)+
-      geom_density(aes(y=after_stat(count)),position = 'stack',fill='grey')+
+      geom_density(aes(y=after_stat(count)),position = 'stack',fill='grey',alpha=0.5)+
       ylab("Nombre d'accidents")+
       xlab("Année")
   } else {
     graph12 <- don %>% 
       ggplot()+
       aes(x=an,fill = grav)+
-      geom_density(aes(y=after_stat(count)),position = 'stack')+
+      geom_density(aes(y=after_stat(count)),position = 'stack',alpha=0.5)+
       ylab("Nombre d'accidents")+
       xlab("Année")
   }

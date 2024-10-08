@@ -99,7 +99,8 @@ navbarMenu(
                   sidebarPanel(
                     h2("Paramètres"),
                     selectInput('type_ts', choices = levels(don$grav),label = 'Gravité des blessures'),
-                    selectInput('annee_pred', choices = c(as.character(2022:2040)),label = 'Année de prévision')
+                    selectInput('annee_pred', choices = c(as.character(2022:2040)),label = 'Année de prévision'),
+                    actionButton('parametres_serie_temp',label = 'Valider')
                     ),
                    
                   mainPanel(

@@ -2,8 +2,9 @@
 source('Res_series_temp.R')
 
 output$graph_ts <- renderPlotly({
-  
-  liste_ts <- list(Total = ts1,
+  input$parametres_serie_temp
+  isolate({
+    liste_ts <- list(Total = ts1,
                         'Indemne' = tsi,
                         'Blessé léger' = tsl,
                         'Blessé hospitalisé' = tsh,
@@ -61,4 +62,8 @@ output$graph_ts <- renderPlotly({
     labs(title = "Prédiction du nombre d'accidents")
   
   plotly::ggplotly(gpl, tooltip = c("x", "y"))
+  }
+    )
+  
+  
 })

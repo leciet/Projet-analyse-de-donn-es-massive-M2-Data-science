@@ -1,9 +1,9 @@
 tabPanel(title = "Description",
          HTML("<h1> Contexte </h1>
-                          <body> Selon l'Observatoire national interministériel de la sécurité routière (ONISR), le risque pour un cycliste d’être victime d’un accident est <b>trois fois plus élevé</b> que pour un automobiliste. Le risque d’être gravement blessé est quant à lui <b>seize fois plus élevé</b>.<br/>
-                          Pour lutter contre ce phénomène, le gouvernement a mis en place plusieurs règles de sécurité routière.Ainsi, le port d'un gilet réfléchissant et la présence d'un système d'éclairage et sonore est obligatoire et le port du casque est vivement recommandé. 
-                          A ces mesures s'ajoute le développement de pistes cyclabes dans les agglomérations françaises et de nombreuses campagnes sur la sécurité routière. En 2018 notamment, la vitesse sur les routes départementales a été diminué à 80km/h. Mais ces mesures sont-elles suffisantes ?</body><br/>
-                          <h4>Observe-t-on un changement dans le nombre et la gravité des accidents et/ou de l'usage d'équipement ces dernières années ?</h4>
+                          <body> Selon l'Observatoire national interministériel de la sécurité routière (ONISR), un cycliste a <b>trois fois plus</b> de risques d’être impliqué dans un accident qu’un automobiliste, et <b>seize fois plus</b> de chances d’être gravement blessé. <br/>
+                          Pour réduire ces risques, le gouvernement a mis en place plusieurs mesures : port obligatoire du gilet réfléchissant, système d’éclairage et sonore, et recommandation du port du casque. Le développement des pistes cyclables et les campagnes de sensibilisation accompagnent ces actions. En 2018, la vitesse sur les routes départementales a aussi été réduite à 80 km/h. Mais ces mesures suffisent-elles ? </body><br/>
+                          <br/>
+                          <h4>Le nombre et la gravité des accidents ont-ils diminué, et observe-t-on une meilleure adoption des équipements de sécurité ces dernières années ?</h4>
                           <hr>"),
          fluidRow(
            tabsetPanel(
