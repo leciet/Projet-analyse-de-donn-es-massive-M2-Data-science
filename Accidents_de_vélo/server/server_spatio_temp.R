@@ -307,7 +307,6 @@ observeEvent(input$val_frm, {
 })
 
 
-
 # Render the data table
 output$data_table <- renderDT({
   req(filtered) # Require filtered data to be available
@@ -342,38 +341,8 @@ output$serieTemporellePlot <- renderPlotly({
   
   plotly::ggplotly(gpl, tooltip = 'text')
 }) 
-# Prévisions ARIMA
-output$forecastPlot <- renderPlotly({
-  # Ajuster le modèle ARIMA
-  accidents_ts <- ts(accidents_by_year$number_of_accidents, 
-                     start = min(accidents_by_year$year), 
-                     end = max(accidents_by_year$year), 
-                     frequency = 1)
-  model <- auto.arima(accidents_ts, seasonal = TRUE)
-  #print(summay(model))
-  checkresiduals(model)
-  # Prévisions sur les 5 prochaines années
-  #forecast <- predict(model, h = 24)
-  # Forecast horizon based on user-selected year
-  last_year <- max(accidents_by_year$year)
-  forecast_horizon <- input$yearInput - last_year
-  
-  # Make sure the forecast horizon is valid
-  if (forecast_horizon > 0) {
-    fcast <- forecast(model, h = forecast_horizon)
-    
-    # Plot the forecast from the model
-    autoplot(fcast) +
-      ggtitle("Prévision du nombre d'accidents de vélo") +
-      xlab("Année") + ylab("Nombre d'accidents") +
-      theme_minimal()
-  } else {
-    # If the selected year is within the data range, just show a message or existing data
-    plot(accidents_ts, 
-         main = "Aucune prévision disponible avant la dernière année", 
-         xlab = "Année", ylab = "Nombre d'accidents")
-  }
-})
+
+
 # Réactif pour récupérer les valeurs de la sélection du département et de l'année
 selected_data <- reactive({
   req(input$selected_depp, input$selected_yearr)
@@ -382,50 +351,44 @@ selected_data <- reactive({
 })
 
 
-accidents_ts <- ts(accidents_by_year$number_of_accidents, 
-                   start = min(accidents_by_year$year), 
-                   end = max(accidents_by_year$year), 
-                   frequency = 1)
-model <- auto.arima(accidents_ts, seasonal = TRUE)
-#print(summay(model))
-checkresiduals(model)
-
 # Modèle ARIMA : prédiction du nombre d'accidents
 prediction_arima <- reactive({
   req(input$param_pred)  # Attend que le bouton soit cliqué
   
   # Filtrage des données pour le département sélectionné
-  dep_data <- data %>% filter(dep == input$selected_depp)
-  
-  # Agrégation des accidents par année
-  ts_data <- dep_data %>%
-    group_by(an) %>%
-    summarise(
-      lat = mean(lat_ancien, na.rm = TRUE),  # Moyenne de la latitude
-      long = mean(long_ancien, na.rm = TRUE),
-      n_observations = n()# Moyenne de la longitude
-    )
-  
+  dep_data <- data %>% 
+    filter(dep == input$selected_depp) %>%
+    group_by(an, mois) |>
+    summarise(Accidents = n()) |>
+    rename(Année = an, Mois = mois)
   
   # Créer une série temporelle à partir des données agrégées
-  accidents_ts <- ts(ts_data$n_observations, start = min(ts_data$an), frequency = 1)
+  accidents_ts <- ts(dep_data$Accidents)
   
   # Ajuster le modèle ARIMA
-  fit <- auto.arima(accidents_ts)
+  t = 1:length(accidents_ts)
+  x = outer(t, 1:6)*(pi/6)
+  df = data.frame(acc = accidents_ts, t = t, cos = cos(x), sin = sin(x))
+  df <- df[-ncol(df)]
   
-  # Prédire pour l'année sélectionnée
-  year_to_predict <- as.numeric(input$selected_yearr)
-  years_ahead <- year_to_predict - max(ts_data$an)  # Calcul du nombre d'années à prévoir
+  mod <- Arima(accidents_ts, c(2,1,2), xreg = as.matrix(df[,-1])) # ordre (2,1,2) par sécurité
+
+  nb_periodes = 12*(as.numeric(input$selected_yearr) - 2021)
   
-  if (years_ahead > 0) {
-    forecast_result <- forecast(fit, h = years_ahead)
-    predicted_value <- forecast_result$mean[years_ahead]
-  } else {
-    # Si l'année est dans la plage historique, renvoyer la valeur réelle
-    predicted_value <- ts_data$n_observations[ts_data$an == year_to_predict]
-  }
+  t <- (length(accidents_ts) + 1):(length(accidents_ts) + nb_periodes)
+  x <- outer(t, 1:6)*(pi/6)
+  df <- data.frame(t = t, cos = cos(x), sin = sin(x))
+  df <- df[-ncol(df)]
   
-  return(predicted_value)
+  c <- generics::forecast(mod, h = nb_periodes, xreg = as.matrix(df))
+  
+  pred_acc <- c$mean %>%
+    ifelse(. > 0, ., 0) |>
+    tail(12) |>
+    sum() |>
+    round()
+    
+  return(pred_acc)
 })
 
 # Afficher le résultat de la prédiction
@@ -444,16 +407,5 @@ observeEvent(input$param_pred, {
   #shinyjs::alert(prediction_text())
   shinyalert(prediction_text())
 })
-# Afficher un graphique des accidents prédits
-output$predPlot <- renderPlot({
-  req(selected_data())
-  dep_data <- selected_data()
-  
-  ggplot(dep_data, aes(x = an, y = accidents)) +
-    geom_line() +
-    geom_point() +
-    labs(title = paste("Nombre d'accidents prédits pour le département", input$selected_depp),
-         x = "Année", y = "Nombre d'accidents") +
-    theme_minimal()
-})
+
 

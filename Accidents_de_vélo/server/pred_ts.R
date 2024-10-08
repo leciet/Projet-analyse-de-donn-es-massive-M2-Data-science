@@ -33,10 +33,10 @@ output$graph_ts <- renderPlotly({
   fc <- generics::forecast(mod_choisi[[1]], h = nb_periodes, xreg = as.matrix(df))
   
   df_pred <- data.frame(Date = periodes_choisies,
-                        Accidents = fc$mean,
+                        Accidents = round(fc$mean),
                         col = 1,
-                        Upper = fc$upper[,2],
-                        Lower = fc$lower[,2])
+                        Upper = round(fc$upper[,2]),
+                        Lower = round(fc$lower[,2]))
   
   if (input$type_ts == 'Total'){
     df_plot <- nb_acc_tot2 |>

@@ -92,9 +92,9 @@ navbarMenu(
       ))
   ),
   tabPanel(
-    "Étude de la saisonnalité",
+    "Séries temporelles",
     fluidPage(
-      h2("Étude de la saisonnalité"),
+      h2("Séries temporelles"),
       p("Visualisez l'évolution du nombre d'accidents sur les années, puis sur les mois."),
       p("La saisonnalité est cruciale à prendre en compte dans l'évaluation du modèle prédictif."),
     tabsetPanel(
@@ -103,12 +103,12 @@ navbarMenu(
         plotlyOutput("serieTemporellePlot")),
       tabPanel("Évolution mensuelle",
                plotlyOutput("saisonalitePlot")),
-      tabPanel("Serie temporelle", 
+      tabPanel("Série temporelle", 
                sidebarLayout(
                  sidebarPanel(
                    h2("Paramètres"),
                    selectInput('type_ts', choices = levels(don$grav),label = 'Gravité des blessures'),
-                   selectInput('annee_pred', choices = c(as.character(2022:2040)),label = 'Année de prévision'),
+                   selectInput('annee_pred', choices = 2022:2040,label = 'Année de prévision'),
                    actionButton('parametres_serie_temp',label = 'Valider')
                  ),
                  
@@ -116,18 +116,15 @@ navbarMenu(
                    plotlyOutput("graph_ts")))
       )))),
   tabPanel(
-    "Prédiction",
+    "Prédiction par département",
     fluidRow(
       column(
         width = 12,
         wellPanel(h1("Modèle de prédiction"),
                   h2("Paramètres"),
                   selectInput("selected_depp", "Sélectionnez un département", choices = unique(data$dep)),
-                  selectInput("selected_yearr", "Sélectionnez une année", choices = unique(seq(max(data$an) + 1, max(data$an) + 30))),
+                  selectInput("selected_yearr", "Sélectionnez une année", choices = 2022:2040),
                   actionButton('param_pred', 'Afficher la prédiction'))
-        #textOutput("prediction_result"),
-        
-        # Carte de gravité ici
       )
     )
   )
