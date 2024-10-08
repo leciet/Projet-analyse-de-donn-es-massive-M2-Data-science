@@ -16,7 +16,7 @@ library(readxl)
 library(DT)
 library(shinyjs)
 library(shinyalert)
-library(tidyverse)  # Load the tidyverse package
+library(tidyverse)
 library(shiny)
 library(jsonlite)
 library(plotly)
@@ -24,7 +24,7 @@ library(bslib)
 library(anytime)
 library(fabletools)
 
-source("traitement_donnees.R")
+source("server/traitement_donnees.R")
 
 var_analyse <- names(don)[c(2:5,10:18,20,21)]
 
