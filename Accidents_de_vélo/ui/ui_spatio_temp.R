@@ -5,11 +5,12 @@ navbarMenu(
     "Analyse spatiale",
     fluidPage(
       h2('Analyse spatiale'),
-      p("Vous pouvez ici explorer directement la répartition spatiale des accidents."),
+      p("Vous pouvez ici explorer directement la répartition spatiale des accidents selon leur gravité."),
       p("Les accidents sont regroupés par département et peuvent être visualisés sur la carte de la France ci-dessous."),
+      p(em("Remarque : les valeurs sur la représentation spatiale sont en pourcentage")),
       tabsetPanel(
         tabPanel(
-          "Évolution en fonction du sexe",
+          "Représentation spatiale",
           fluidRow(
             column(
               width = 4,
@@ -27,7 +28,7 @@ navbarMenu(
           )
         ),
         tabPanel(
-          "Évolution en fonction de la gravité",
+          "Représentation temporelle",
           fluidRow(
             column(
               width = 2
