@@ -26,7 +26,7 @@ library(plotly)
 library(bslib)
 library(anytime)
 library(fabletools)
-
+source("traitement_donnees.R")
 # load('server/don.RData')
 var_analyse <- names(don)[c(2:5,10:18,20,21)]
 # Define UI for application that draws a histogram
