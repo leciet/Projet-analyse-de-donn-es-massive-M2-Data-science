@@ -8,6 +8,7 @@
 #
 
 source("server/traitement_donnees.R")
+
 shinyServer(function(input, output, session) {
   
   # Charger les données

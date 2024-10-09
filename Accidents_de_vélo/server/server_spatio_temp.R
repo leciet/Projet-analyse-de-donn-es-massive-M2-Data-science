@@ -1,51 +1,26 @@
-data_global <- data %>%
-  group_by(dep) %>%
-  summarise(
-    lat = mean(lat_ancien, na.rm = TRUE),
-    long = mean(long_ancien, na.rm = TRUE),
-    nombre_lignes = n(),
-    femmes = sum(sexe == "Feminin", na.rm = TRUE),
-    hommes = sum(sexe == "Masculin", na.rm = TRUE)
-  ) %>%
-  mutate(
-    pourcentage_femmes = (femmes / nombre_lignes) * 100,
-    pourcentage_hommes = (hommes / nombre_lignes) * 100
-  ) %>%
-  select(dep, nombre_lignes, pourcentage_femmes, pourcentage_hommes, lat, long)
 
 # Initialiser la carte `map_sexe` au démarrage
-output$map_sexe <- renderLeaflet({
-  tilesURL <- "http://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}"
-  
-  leaflet(width = "100%", height = "400px") %>%
-    addTiles(tilesURL) %>%
-    addMinicharts(
-      data_global$long,
-      data_global$lat,
-      chartdata = data_global[, c("pourcentage_hommes", "pourcentage_femmes")],
-      type = "pie",
-      colorPalette = c("blue", "pink"),
-      width = 20,
-      height = 20,
-      showLabels = TRUE
-    )
-})
+result_sexe_filtered <- data_global
 
 # Réaction au bouton 'param_sexe'
 observeEvent(input$param_sexe, {
-  result_sexe_filtered <- data %>%
-    filter(dep == input$selected_dep, an == input$selected_year) %>%
+  dta_f <- dta
+  
+  if (input$selected_dep != "Tous") dta_f <- dta %>% filter(dep == input$selected_dep)
+  if (input$selected_year != "Toutes") dta_f <- dta %>% filter(an == input$selected_year)
+  
+  result_sexe_filtered <- dta_f %>%
     group_by(dep) %>%
     summarise(
-      lat = mean(lat_ancien, na.rm = TRUE),
-      long = mean(long_ancien, na.rm = TRUE),
+      lat = mean(lat_nouveau, na.rm = TRUE),
+      long = mean(long_nouveau, na.rm = TRUE),
       nombre_lignes = n(),
       femmes = sum(sexe == "Feminin", na.rm = TRUE),
       hommes = sum(sexe == "Masculin", na.rm = TRUE)
     ) %>%
     mutate(
-      pourcentage_femmes = (femmes / nombre_lignes) * 100,
-      pourcentage_hommes = (hommes / nombre_lignes) * 100
+      pourcentage_femmes = round((femmes / nombre_lignes) * 100),
+      pourcentage_hommes = round((hommes / nombre_lignes) * 100)
     ) %>%
     select(dep, nombre_lignes, pourcentage_femmes, pourcentage_hommes, lat, long)
   
@@ -71,36 +46,12 @@ observeEvent(input$param_sexe, {
   }
 })
 
-# Observer pour le second bouton
-# Add reset functionality for the sexe parameters
-observeEvent(input$param_sexe_2, {
-  updateSelectInput(session, "selected_dep", selected = "")
-  updateSelectInput(session, "selected_year", selected = "")
-  
-  output$map_sexe <- renderLeaflet({
-    tilesURL <- "http://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}"
-    
-    leaflet(width = "100%", height = "400px") %>%
-      addTiles(tilesURL) %>%
-      addMinicharts(
-        data_global$long,
-        data_global$lat,
-        chartdata = data_global[, c("pourcentage_hommes", "pourcentage_femmes")],
-        type = "pie",
-        colorPalette = c("blue", "pink"),
-        width = 20,
-        height = 20,
-        showLabels = TRUE
-      )
-  })
-})
-
-result_ds <- data %>%
+result_ds <- dta %>%
   mutate(dep = as.factor(dep), an = as.factor(an)) %>%
   group_by(dep, an, grav, .drop = FALSE) %>%
   summarise(count = n(), .groups = 'drop') %>%
   spread(key = grav, value = count, fill = 0) %>% # Spread severity levels into columns
-  left_join(lat_long, by = "dep")
+  left_join(unique(lat_long), by = "dep")
 
 # Carte d'évolution par gravité
 output$map_gravite <- renderLeaflet({
@@ -123,7 +74,7 @@ output$map_gravite <- renderLeaflet({
 
 # Afficher les données dans un tableau
 output$donnees <- DT::renderDT({
-  datatable(data)
+  datatable(dta)
 })
 
 pal <- colorBin(
@@ -167,7 +118,7 @@ observeEvent(input$val_frm, {
     req(input$selected_dep2, input$selected_an, input$selected_mois) # Require at least these three filters
     
     # Commencez par le DataFrame complet
-    filtered_df <- data
+    filtered_df <- dta
     
     # Appliquer les filtres selon les choix de l'utilisateur
     if (!is.null(input$selected_dep2)) {
@@ -184,74 +135,74 @@ observeEvent(input$val_frm, {
     
     # Assurez-vous de vérifier que les entrées utilisateur sont de type correct
     if (!is.null(input$selected_lum)) {
-      if (is.character(data$lum) || is.factor(data$lum)) {
+      if (is.character(dta$lum) || is.factor(dta$lum)) {
         filtered_df <- filtered_df %>% filter(as.character(lum) %in% input$selected_lum)
       }
     }
     
     if (!is.null(input$selected_atm)) {
-      if (is.character(data$atm) || is.factor(data$atm)) {
+      if (is.character(dta$atm) || is.factor(dta$atm)) {
         filtered_df <- filtered_df %>% filter(as.character(atm) %in% input$selected_atm)
       }
     }
     
     if (!is.null(input$selected_catr)) {
-      if (is.character(data$catr) || is.factor(data$catr)) {
+      if (is.character(dta$catr) || is.factor(dta$catr)) {
         filtered_df <- filtered_df %>% filter(as.character(catr) %in% input$selected_catr)
       }
     }
     
     # Répétez pour les autres variables, en vérifiant si elles sont des caractères ou des facteurs
     if (!is.null(input$selected_grav)) {
-      if (is.character(data$grav) || is.factor(data$grav)) {
+      if (is.character(dta$grav) || is.factor(dta$grav)) {
         filtered_df <- filtered_df %>% filter(as.character(grav) %in% input$selected_grav)
       }
     }
     
     if (!is.null(input$selected_surf)) {
-      if (is.character(data$surf) || is.factor(data$surf)) {
+      if (is.character(dta$surf) || is.factor(dta$surf)) {
         filtered_df <- filtered_df %>% filter(as.character(surf) %in% input$selected_surf)
       }
     }
     
     if (!is.null(input$selected_sexe)) {
-      if (is.character(data$sexe) || is.factor(data$sexe)) {
+      if (is.character(dta$sexe) || is.factor(dta$sexe)) {
         filtered_df <- filtered_df %>% filter(as.character(sexe) %in% input$selected_sexe)
       }
     }
     
     if (!is.null(input$selected_age)) {
-      if (is.character(data$age) || is.factor(data$age)) {
+      if (is.character(dta$age) || is.factor(dta$age)) {
         filtered_df <- filtered_df %>% filter(as.character(age) %in% input$selected_age)
       }
     }
     
     if (!is.null(input$selected_trajet)) {
-      if (is.character(data$trajet) || is.factor(data$trajet)) {
+      if (is.character(dta$trajet) || is.factor(dta$trajet)) {
         filtered_df <- filtered_df %>% filter(as.character(trajet) %in% input$selected_trajet)
       }
     }
     
     if (!is.null(input$selected_equipement)) {
-      if (is.character(data$equipement) || is.factor(data$equipement)) {
+      if (is.character(dta$equipement) || is.factor(dta$equipement)) {
         filtered_df <- filtered_df %>% filter(as.character(equipement) %in% input$selected_equipement)
       }
     }
     
     if (!is.null(input$selected_casque)) {
-      if (is.character(data$casque) || is.factor(data$casque)) {
+      if (is.character(dta$casque) || is.factor(dta$casque)) {
         filtered_df <- filtered_df %>% filter(as.character(casque) %in% input$selected_casque)
       }
     }
     
     if (!is.null(input$selected_git)) {
-      if (is.character(data$git) || is.factor(data$git)) {
+      if (is.character(dta$git) || is.factor(dta$git)) {
         filtered_df <- filtered_df %>% filter(as.character(git) %in% input$selected_git)
       }
     }
     
     if (!is.null(input$selected_equipement_autre)) {
-      if (is.character(data$equipement_autre) || is.factor(data$equipement_autre)) {
+      if (is.character(dta$equipement_autre) || is.factor(dta$equipement_autre)) {
         filtered_df <- filtered_df %>% filter(as.character(equipement_autre) %in% input$selected_equipement_autre)
       }
     }
@@ -270,8 +221,6 @@ observeEvent(input$val_frm, {
       n_observations = n()# Moyenne de la longitude
     )  %>%
     select(dep,lat,long,n_observations)
-  #req(filtered_data())
-  #print(str(filtered_data()))
   
   
   if (nrow(lat_long_fil) > 0) {
@@ -346,7 +295,7 @@ output$serieTemporellePlot <- renderPlotly({
 # Réactif pour récupérer les valeurs de la sélection du département et de l'année
 selected_data <- reactive({
   req(input$selected_depp, input$selected_yearr)
-  data %>% 
+  dta %>% 
     filter(dep == input$selected_depp, an == input$selected_yearr)
 })
 
@@ -356,7 +305,7 @@ prediction_arima <- reactive({
   req(input$param_pred)  # Attend que le bouton soit cliqué
   
   # Filtrage des données pour le département sélectionné
-  dep_data <- data %>% 
+  dep_data <- dta %>% 
     filter(dep == input$selected_depp) %>%
     group_by(an, mois) |>
     summarise(Accidents = n()) |>
