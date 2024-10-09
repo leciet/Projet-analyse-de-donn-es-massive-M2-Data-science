@@ -3,32 +3,38 @@ load("don.RData")
 # Define server logic required to draw a histogram
 cd <- read_excel("Centre_departement.xlsx", skip = 1)
 cd$`ɸ (° ' "")` <- gsub(" ", "", cd$`ɸ (° ' "")`)
+cd$`Ʌ (° ' "")` <- gsub("O", "W", cd$`Ʌ (° ' "")`)
 cd$`ɸ (° ' "")` <- char2dms(cd$`ɸ (° ' "")`, chd='°', chm="'", chs='"') %>% as.numeric()
 cd$`Ʌ (° ' "")` <- char2dms(cd$`Ʌ (° ' "")`, chd='°', chm="'", chs='"') %>% as.numeric()
 names(cd)[1] <- "dep"
 names(cd)[5] <- "lat"
 names(cd)[4] <- "long"
-merged_df <- merge(don, cd[, c("dep", "lat", "long")], by = "dep", all.x = TRUE, suffixes = c("_ancien", "_nouveau"))
-head(merged_df)
-condition <- merged_df$lat_ancien == 0 | is.na(merged_df$lat_ancien)
-merged_df$lat_ancien[condition] <- merged_df$lat_nouveau[condition]
 
-condition2 <- merged_df$long_ancien == 0 | is.na(merged_df$long_ancien)
-merged_df$long_ancien[condition2] <- merged_df$long_nouveau[condition2]
+# problème avec certains départements : 1 au lieu de 01
+don$dep <- as.character(don$dep)
+don[don$dep=="1",'dep'] <- "01"
+don[don$dep=="2",'dep'] <- "02"
+don[don$dep=="3",'dep'] <- "03"
+don[don$dep=="4",'dep'] <- "04"
+don[don$dep=="5",'dep'] <- "05"
+don[don$dep=="6",'dep'] <- "06"
+don[don$dep=="7",'dep'] <- "07"
+don[don$dep=="8",'dep'] <- "08"
+don[don$dep=="9",'dep'] <- "09"
 
-data <- merged_df %>% select(-lat_nouveau, -long_nouveau)
-head(data)
-colnames(data)
-data$dep <- as.character(data$dep)
-unique(data$dep)
+merged_df <- merge(don, cd[, c("dep", "lat", "long")], by = "dep", all.x = TRUE, suffixes = c("_ancien", "_dep"))
+
+unique(don$dep)
+
+
 
 # Préparation des données pour les cartes de gravité
-lat_long <- data %>%
+lat_long <- merged_df %>%
   group_by(dep) %>%
   summarise(
-    lat = mean(lat_ancien, na.rm = TRUE),  # Moyenne de la latitude
-    long = mean(long_ancien, na.rm = TRUE),
-    n_observations = n()# Moyenne de la longitude
+    lat = lat_dep,  
+    long = long_dep,
+    n_observations = n()
   )
 mois_levels <- c("janvier", "février", "mars", "avril", "mai", "juin", 
                  "juillet", "août", "septembre", "octobre", "novembre", "décembre")
@@ -51,11 +57,11 @@ accidents_ts <- ts(accidents_by_year$number_of_accidents,
                    frequency = 1)
 head(lat_long)
 
-data_global <- data %>%
+data_global <- merged_df %>%
   group_by(dep) %>%
   summarise(
-    lat = mean(lat_ancien, na.rm = TRUE),
-    long = mean(long_ancien, na.rm = TRUE),
+    lat = lat_dep,
+    long = long_dep,
     nombre_lignes = n(),
     femmes = sum(sexe == "Femme", na.rm = TRUE),
     hommes = sum(sexe == "Homme", na.rm = TRUE)
